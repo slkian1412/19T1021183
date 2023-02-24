@@ -89,8 +89,25 @@ namespace _19T1021183.Web.Controllers
             return View(data);
 
         }
-        public ActionResult Save(Customer data)
+        public ActionResult Save(Customer data)//save(int SupplierID, string SupplierName,string ContactName,...
         {
+            if (string.IsNullOrWhiteSpace(data.CustomerName))
+                ModelState.AddModelError(nameof(data.CustomerName), "Tên khách hàng không được để trống");
+            if (string.IsNullOrWhiteSpace(data.Country))
+                ModelState.AddModelError(nameof(data.Country), "Vui lòng chọn quốc gia");
+            if (string.IsNullOrWhiteSpace(data.Email))
+                ModelState.AddModelError(nameof(data.Email), "Email không được để trống");
+            if (string.IsNullOrWhiteSpace(data.Address))
+                ModelState.AddModelError(nameof(data.Address), "Địa chỉ không được để trống");
+            data.ContactName = data.ContactName ?? "";
+            data.City = data.City ?? "";
+            data.PostalCode = data.PostalCode ?? "";
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Tille = data.CustomerID == 0 ? "Bổ sung khách hàng" : "Cập nhật khách hàng ";
+                return View("Edit", data);
+            }
             if (data.CustomerID == 0)
             {
                 CommonDataService.AddGetCustomer(data);
@@ -101,7 +118,7 @@ namespace _19T1021183.Web.Controllers
             }
             return RedirectToAction("Index");
         }
-        
+
 
         /// <summary>
         /// Xóa Khách hàng

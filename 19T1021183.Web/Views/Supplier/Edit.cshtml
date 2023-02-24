@@ -19,7 +19,7 @@
                    @class = "form-control",
                    @autofocus = "autofocus"
                })
-                    @Html.ValidationMessageFor(m => m.SupplierName, "", new { @style = "color:#0f00" })
+                    @Html.ValidationMessageFor(m => m.SupplierName, "", new { @style = "color:#f00" })
 
                 </div>
             </div>
@@ -74,7 +74,6 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    @Html.ValidationSummary("", new { style = "color:#f00" })
                     <button type="submit" class="btn btn-primary">
                         <i class="fa fa-floppy-o"></i>
                         Lưu dữ liệu

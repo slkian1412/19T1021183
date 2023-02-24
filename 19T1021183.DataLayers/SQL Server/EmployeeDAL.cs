@@ -135,7 +135,7 @@ namespace _19T1021183.DataLayers.SQL_Server
                         EmployeeID = Convert.ToInt32(dbReader["EmployeeID"]),
                         LastName = Convert.ToString(dbReader["LastName"]),
                         FirstName = Convert.ToString(dbReader["FirstName"]),
-                        BirthDate = Convert.ToDateTime(dbReader["BirthDate"]),
+                        BirthDate = Convert.ToString(dbReader["BirthDate"]),
                         Photo = Convert.ToString(dbReader["Photo"]),
                         Notes = Convert.ToString(dbReader["Notes"]),
                         Email = Convert.ToString(dbReader["Email"])
@@ -219,7 +219,7 @@ namespace _19T1021183.DataLayers.SQL_Server
                         EmployeeID = Convert.ToInt32(dbReader["EmployeeID"]),
                         LastName = Convert.ToString(dbReader["LastName"]),
                         FirstName = Convert.ToString(dbReader["FirstName"]),
-                        BirthDate = Convert.ToDateTime(dbReader["BirthDate"]),
+                        BirthDate = Convert.ToString(dbReader["BirthDate"]),
                         Photo = Convert.ToString(dbReader["Photo"]),
                         Notes = Convert.ToString(dbReader["Notes"]),
                         Email = Convert.ToString(dbReader["Email"])
@@ -247,13 +247,13 @@ namespace _19T1021183.DataLayers.SQL_Server
                                     WHERE EmployeeID = @EmployeeID";
                 cmd.CommandType = CommandType.Text;
                 cmd.Connection = cn;
+                cmd.Parameters.AddWithValue("@EmployeeID", data.EmployeeID);
                 cmd.Parameters.AddWithValue("@FirstName", data.FirstName);
                 cmd.Parameters.AddWithValue("@LastName", data.LastName);
                 cmd.Parameters.AddWithValue("@BirthDate", data.BirthDate);
                 cmd.Parameters.AddWithValue("@Photo", data.Photo);
                 cmd.Parameters.AddWithValue("@Notes", data.Notes);
                 cmd.Parameters.AddWithValue("@Email", data.Email);
-                cmd.Parameters.AddWithValue("@EmployeeID", data.EmployeeID);
 
                 result = cmd.ExecuteNonQuery() > 0;
 

@@ -8,6 +8,7 @@ using _19T1021183.DomainModels;
 using _19T1021183.DataLayers;
 using System.Reflection;
 using _19T1021183.Web.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace _19T1021183.Web.Controllers
 {
@@ -92,8 +93,23 @@ namespace _19T1021183.Web.Controllers
             return View(data);
 
         }
-        public ActionResult Save(Employee data)
+        public ActionResult Save(Employee data)//save(int EmployeeID, string ImployeeName,...
         {
+            if (string.IsNullOrWhiteSpace(data.FirstName))
+                ModelState.AddModelError(nameof(data.FirstName), "Họ không được để trống");
+            if (string.IsNullOrWhiteSpace(data.LastName))
+                ModelState.AddModelError(nameof(data.LastName), "Tên không được để trống");
+            if (string.IsNullOrWhiteSpace(data.Email))
+                ModelState.AddModelError(nameof(data.Email), "Email không được để trống");
+            data.BirthDate = data.BirthDate ?? "";
+            data.Notes = data.Notes ?? "";
+            data.Photo = data.Photo ?? "";
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Tille = data.EmployeeID == 0 ? "Bổ sung nhân viên" : "Cập nhât nhân viên ";
+                return View("Edit", data);
+            }
             if (data.EmployeeID == 0)
             {
                 CommonDataService.AddGetEmployee(data);

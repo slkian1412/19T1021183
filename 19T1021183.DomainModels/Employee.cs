@@ -14,7 +14,7 @@ namespace _19T1021183.DomainModels
         ///
         public string FirstName { get; set; }
         ///
-        public DateTime BirthDate { get; set; }
+        public string BirthDate { get; set; }
         ///
         public string Photo { get; set; }
         ///

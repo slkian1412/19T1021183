@@ -93,8 +93,18 @@ namespace _19T1021183.Web.Controllers
             return View(data);
 
         }
-        public ActionResult Save(Category data)
+        public ActionResult Save(Category data)//save(int SupplierID, string SupplierName,string ContactName,...
         {
+            if (string.IsNullOrWhiteSpace(data.CategoryName))
+                ModelState.AddModelError(nameof(data.CategoryName), "Tên loại hàng không được để trống");
+            data.Description = data.Description ?? "";
+            data.ParentCategoryId = data.ParentCategoryId ?? "";
+            
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Tille = data.CategoryID == 0 ? "Bổ sung loại hàng" : "Cập nhât loại hàng ";
+                return View("Edit", data);
+            }
             if (data.CategoryID == 0)
             {
                 CommonDataService.AddGetCategory(data);
