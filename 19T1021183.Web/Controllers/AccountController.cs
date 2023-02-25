@@ -45,7 +45,8 @@ namespace _19T1021183.Web.Controllers
                 ModelState.AddModelError("", "Đăng nhập thất bại");
                 return View();
             }
-            FormsAuthentication.SetAuthCookie(userAccount.UserName, false);
+            string cookieValue = Newtonsoft.Json.JsonConvert.SerializeObject(userAccount);
+            FormsAuthentication.SetAuthCookie(cookieValue, false);
             return RedirectToAction("Index", "Home");
         }
         public ActionResult Logout()
