@@ -22,23 +22,23 @@
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="~/Themes/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                        <span class="hidden-xs">Đỗ Minh Phước</span>
+                        <span class="hidden-xs">@User.Identity.Name</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
                             <img src="~/Themes/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                             <p>
-                                Đỗ Minh Phước
+                                @User.Identity.Name
                             </p>
                         </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Tài khoản</a>
+                                <a href="" class="btn btn-default btn-flat">Tài khoản</a>
                             </div>
                             <div class="pull-right">
-                                <a href="#" class="btn btn-default btn-flat">Đăng xuất</a>
+                                <a href="~/Account/Logout" class="btn btn-default btn-flat">Đăng xuất</a>
                             </div>
                         </li>
                     </ul>

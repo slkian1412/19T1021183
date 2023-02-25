@@ -10,6 +10,7 @@ using System.Web.UI;
 
 namespace _19T1021183.Web.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private const int PAGE_SIZE = 5;

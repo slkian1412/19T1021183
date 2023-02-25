@@ -10,6 +10,7 @@ using _19T1021183.Web.Models;
 
 namespace _19T1021183.Web.Controllers
 {
+    [Authorize]
     public class ShipperController : Controller
     {
         private const int PAGE_SIZE = 5;

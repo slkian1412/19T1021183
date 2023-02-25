@@ -9,9 +9,11 @@ using _19T1021183.DataLayers;
 using System.Reflection;
 using _19T1021183.Web.Models;
 using Microsoft.Ajax.Utilities;
+using _19T1021183.Web.Codes;
 
 namespace _19T1021183.Web.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         private const int PAGE_SIZE = 5;
@@ -89,22 +91,35 @@ namespace _19T1021183.Web.Controllers
             var data = CommonDataService.GetEmployee(id);
             if (data == null)
                 return RedirectToAction("Index");
-            ViewBag.Title = "Cập nhập nhà cung cấp";
+            ViewBag.Title = "Cập nhật nhân viên";
             return View(data);
 
         }
-        public ActionResult Save(Employee data)//save(int EmployeeID, string ImployeeName,...
+        public ActionResult Save(Employee data, string birthday, HttpPostedFileBase uploadPhoto)//save(int EmployeeID, string FirstName,...
         {
+            DateTime? d = Converter.DMYStringToDateTime(birthday);
+            if (d == null)
+                ModelState.AddModelError(nameof(data.BirthDate), $"Ngày {birthday} không hợp lệ. Vui lòng nhập theo định dạng DD/MM/YYYY");
+            else
+                data.BirthDate = d.Value;
+
             if (string.IsNullOrWhiteSpace(data.FirstName))
                 ModelState.AddModelError(nameof(data.FirstName), "Họ không được để trống");
             if (string.IsNullOrWhiteSpace(data.LastName))
                 ModelState.AddModelError(nameof(data.LastName), "Tên không được để trống");
             if (string.IsNullOrWhiteSpace(data.Email))
                 ModelState.AddModelError(nameof(data.Email), "Email không được để trống");
-            data.BirthDate = data.BirthDate ?? "";
             data.Notes = data.Notes ?? "";
             data.Photo = data.Photo ?? "";
 
+            if(uploadPhoto != null)
+            {
+                string folder = Server.MapPath("~/Images/Employees");
+                string fileName = $"{DateTime.Now.Ticks}_{uploadPhoto.FileName}";
+                string filePath = System.IO.Path.Combine(folder, fileName);
+                uploadPhoto.SaveAs(filePath);
+                data.Photo = fileName;
+            }
             if (!ModelState.IsValid)
             {
                 ViewBag.Tille = data.EmployeeID == 0 ? "Bổ sung nhân viên" : "Cập nhât nhân viên ";
