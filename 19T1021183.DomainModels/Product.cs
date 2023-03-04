@@ -9,7 +9,7 @@ namespace _19T1021183.DomainModels
     /// <summary>
     /// Mặt hàng
     /// </summary>
-    public class Product
+    public class Product 
     {
         ///<summary>
         ///
@@ -39,6 +39,7 @@ namespace _19T1021183.DomainModels
         ///
         ///</summary>
         public string Photo { get; set; }
+
     }
 
 }

@@ -1,49 +1,59 @@
-﻿@model _19T1021183.Web.Models.PaginationSearchInput
-
-
+﻿@model _19T1021183.Web.Models.ProductSearchInput
 @{
     ViewBag.Title = "Mặt hàng";
 }
-
 <div class="container-fluid box box-primary">
     <div class="box-header">
     </div>
     <div class="box-body">
         <form id="formSearch" action="~/Product/Search" method="post">
+            <input type="hidden" name="PageSize" value="@Model.PageSize">
             <div class="row">
                 <div class="col-sm-3">
-                    <select class="form-control" name="category">
-                        <option>-- Loại hàng --</option>
-                        <option>Mỹ phẩm</option>
-                        <option>Thực phẩm</option>
-                    </select>
+                    @* <select class="form-control" name="category">
+                            <option>-- Loại hàng --</option>
+                            <option>Mỹ phẩm</option>
+                            <option>Thực phẩm</option>
+                        </select>*@
+                    @Html.DropDownListFor(m => m.CategoryID, _19T1021183.Web.SelectListHelper.Categories(), new
+               {
+                   @class = "form-control",
+                   onchange = "doSearch(1)"
+               })
                 </div>
                 <div class="col-sm-3">
-                    <select class="form-control" name="category">
-                        <option>-- Nhà cung cấp --</option>
-                        <option>Công ty TNHH Thành Công</option>
-                        <option>Vina Foods</option>
-                    </select>
+                    @* <select class="form-control" name="category">
+                            <option>-- Nhà cung cấp --</option>
+                            <option>Công ty TNHH Thành Công</option>
+                            <option>Vina Foods</option>
+                        </select>*@
+                    @Html.DropDownListFor(m => m.SupplierID, _19T1021183.Web.SelectListHelper.Suppliers(), new
+                {
+                    @class = "form-control",
+                    onchange = "doSearch(1)"
+                })
                 </div>
-                <div class="input-group">
-                    <input type="hidden" name="PageSize" value="@Model.PageSize" />
-                    <input type="text"
+                <div class="col-sm-6 input-group">
+                    @*<input type="hidden" name="PageSize" value=""@Model.SearchValue"" />*@
+                    <input type="text" name="searchValue"
                            class="form-control"
-                           placeholder="Search"
-                           name="searchValue" value="@Model.SearchValue" autofocus>
-                    <div class="input-group-btn">
-                        <button class="btn btn-default" type="submit">
-                            <i class="glyphicon glyphicon-search"></i> Tìm kiếm
+                           placeholder="Nhập tên mặt hàng cần tìm" value="@Model.SearchValue">
+                    <span class="input-group-btn">
+                        <button type="submit" id="search-btn" class="btn btn-flat btn-info">
+                            <i class="fa fa-search"></i>
                         </button>
-
-                        <a href="~/Product/Create" class="btn btn-primary" style="margin-left:5px;">
+                        <a href="~/Product/create"
+                           class="btn btn-flat btn-primary"
+                           style="margin-left:5px;">
                             <i class="fa fa-plus"></i> Bổ sung
                         </a>
-                    </div>
+                    </span>
                 </div>
             </div>
         </form>
-        <div id="searchResult"></div>
+        <div id="searchResult">
+
+        </div>
     </div>
 </div>
 @section scripts{

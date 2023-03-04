@@ -30,5 +30,44 @@ namespace _19T1021183.Web//
             return list;
         }
 
+        public static List<SelectListItem> Categories()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem()
+            {
+                Value = "",
+                Text = "...Chọn loại hàng..."
+            });
+            foreach (var item in CommonDataService.ListOfCategories())
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value =Convert.ToString(item.CategoryID),
+                    Text = item.CategoryName
+                });
+            }
+
+            return list;
+        }
+
+        public static List<SelectListItem> Suppliers()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem()
+            {
+                Value = "",
+                Text = "...Chọn nhà cung cấp..."
+            });
+            foreach(var item in CommonDataService.ListOfSuppliers())
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = Convert.ToString(item.SupplierID),
+                    Text = item.SupplierName
+                });
+            }
+            return list;
+        }
+
     }
 }

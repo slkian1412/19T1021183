@@ -60,7 +60,7 @@ namespace _19T1021183.Web.Controllers
         public ActionResult Search(Models.PaginationSearchInput condition)
         {
             int rowCount = 0;
-            var data = CommonDataService.ListOfShipper(condition.Page, condition.PageSize, condition.SearchValue, out rowCount);
+            var data = CommonDataService.ListOfShippers(condition.Page, condition.PageSize, condition.SearchValue, out rowCount);
             var result = new Models.ShipperSearchOutput()
             {
                 Page = condition.Page,
@@ -99,7 +99,7 @@ namespace _19T1021183.Web.Controllers
             }
             if (data.ShipperID == 0)
             {
-                CommonDataService.AddGetShipper(data);
+                CommonDataService.AddShipper(data);
             }
             else
             {

@@ -1,85 +1,105 @@
-﻿
+﻿@model _19T1021183.DomainModels.Product
 @{
-    ViewBag.Title = "Bổ sung mặt hàng";
+    
 }
-
 <div class="box box-primary">
-    <div class="box-header with-border ">
-    </div>
-
     <div class="box-body">
-        <form class="form-horizontal" action="#" method="post">
+        <form action="~/Product/Save/" class="form-horizontal" method="post" enctype="multipart/form-data">
+
+            @Html.AntiForgeryToken()
+
+            <input name="ProductID" type="hidden" value="@Model.ProductID">
             <div class="form-group">
-                <label class="control-label col-sm-2">Tên mặt hàng:</label>
+                <label class="control-label col-sm-2" for="ProductName">Product Name:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="ProductName" autofocus>
+                    <input autofocus class="form-control" id="ProductName" name="ProductName" placeholder="Product Name" type="text" value="@Model.ProductName">
+                    @Html.ValidationMessageFor(m => m.ProductName, "", new
+                    {
+                        @class = "text-danger"
+                    })
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-sm-2">Loại hàng:</label>
+                <label class="control-label col-sm-2">Category:</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="categoryID">
-                        <option>-- Loại hàng --</option>
-                        <option>Mỹ phẩm</option>
-                        <option>Thực phẩm</option>
-                    </select>
+                    @Html.DropDownListFor(m => m.CategoryID, _19T1021183.Web.SelectListHelper.Categories(), new
+                    {
+                        @class = "form-control"
+                    })
+                    @Html.ValidationMessageFor(m => m.CategoryID, "", new
+                    {
+                        @class = "text-danger"
+                    })
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-sm-2">Nhà cung cấp:</label>
+                <label class="control-label col-sm-2">Supplier:</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="supplierID">
-                        <option>-- Nhà cung cấp --</option>
-                        <option>Công ty TNHH Thành Công</option>
-                        <option>Vina Foods</option>
-                    </select>
+                    @Html.DropDownListFor(m => m.SupplierID, _19T1021183.Web.SelectListHelper.Suppliers(), new
+                    {
+                        @class = "form-control"
+                    })
+                    @Html.ValidationMessageFor(m => m.SupplierID, "", new
+                    {
+                        @class = "text-danger"
+                    })
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-sm-2">Đơn vị tính:</label>
+                <label class="control-label col-sm-2" for="unit">Unit:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="Unit" autofocus>
+                    <input autofocus class="form-control" id="unit" name="Unit" placeholder="Unit" type="text" value="@Model.Unit">
+                    @Html.ValidationMessageFor(m => m.Unit, "", new
+                    {
+                        @class = "text-danger"
+                    })
                 </div>
-            </div>            
+            </div>
 
             <div class="form-group">
-                <label class="control-label col-sm-2">Giá hàng:</label>
+                <label class="control-label col-sm-2">Price:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="Price">
+                    <input class="form-control" name="Price" placeholder="Price" type="text" value="@Model.Price">
+                    @Html.ValidationMessageFor(m => m.Price, "", new
+                    {
+                        @class = "text-danger"
+                    })
                 </div>
-            </div>                       
+            </div>
 
             <div class="form-group">
-                <label class="control-label col-sm-2">Ảnh minh họa:</label>
+                <label class="control-label col-sm-2">Photo:</label>
                 <div class="col-sm-10">
-                    <input type="file" class="form-control" name="Photo" />
+                    <input class="form-control" name="uploadPhoto" onchange="document.getElementById('photo-img').src = window.URL.createObjectURL(this.files[0])" type="file" value="@Model.Photo" />
+                    @Html.ValidationMessageFor(m => m.Photo, "", new
+                    {
+                        @class = "text-danger"
+                    })
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
-                    <img src="~/Images/Products/samsung_NP900X4C.png" class="img img-bordered" style="width:200px" />
+                    <img alt="@Model.ProductName" class="img img-bordered" id="photo-img" src="~/Images/Products/@Model.Photo" style="width:200px" />
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-save"></i> Lưu dữ liệu
+                        <i class="fa fa-save"></i> Lưu
                     </button>
-                    <a class="btn btn-warning" href="~/product">
-                        <i class="fa fa-ban"></i> Quay lại
+                    <a class="btn btn-warning" href="~/Product">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                        Quay lại
                     </a>
                 </div>
             </div>
         </form>
     </div>
-    <div class="box-footer text-center">
-    </div>
-
 </div>
 
 

@@ -127,7 +127,7 @@ namespace _19T1021183.Web.Controllers
             }
             if (data.EmployeeID == 0)
             {
-                CommonDataService.AddGetEmployee(data);
+                CommonDataService.AddEmployee(data);
             }
             else
             {

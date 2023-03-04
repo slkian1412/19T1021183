@@ -108,7 +108,7 @@ namespace _19T1021183.Web.Controllers
             }
             if (data.CategoryID == 0)
             {
-                CommonDataService.AddGetCategory(data);
+                CommonDataService.AddCategory(data);
             }
             else
             {

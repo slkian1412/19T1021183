@@ -35,6 +35,7 @@ namespace _19T1021183.DomainModels
         ///
         ///</summary>
         public bool IsHidden { get; set; }
+
     }
 
 }

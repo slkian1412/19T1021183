@@ -111,7 +111,7 @@ namespace _19T1021183.Web.Controllers
             }
             if (data.CustomerID == 0)
             {
-                CommonDataService.AddGetCustomer(data);
+                CommonDataService.AddCustomer(data);
             }
             else
             {

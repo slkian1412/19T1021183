@@ -120,7 +120,7 @@ namespace _19T1021183.Web.Controllers
             }
             if (data.SupplierID == 0)
             {
-                CommonDataService.AddGetSupplier(data);
+                CommonDataService.AddSupplier(data);
             }
             else
             {

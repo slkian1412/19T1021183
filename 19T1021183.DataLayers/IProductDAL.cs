@@ -1,9 +1,9 @@
-﻿using _19T1021183.DomainModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _19T1021183.DomainModels;
 
 namespace _19T1021183.DataLayers
 {
@@ -21,7 +21,7 @@ namespace _19T1021183.DataLayers
         /// <param name="categoryID">Mã loại hàng cần tìm (0 nếu không tìm theo loại hàng)</param>
         /// <param name="supplierID">Mã nhà cung cấp cần tìm (0 nếu không tìm theo nhà cung cấp)</param>
         /// <returns></returns>
-        IList<Product> List(int page = 1, int pageSize = 0, string searchValue = "");
+        IList<Product> List(int page = 1, int pageSize = 0, string searchValue = "", int categoryID = 0, int supplierID = 0);
         /// <summary>
         /// Đếm số lượng mặt hàng tìm kiếm được
         /// </summary>

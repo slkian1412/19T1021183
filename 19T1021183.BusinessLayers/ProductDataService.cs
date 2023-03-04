@@ -1,14 +1,11 @@
-﻿using System;
+﻿using _19T1021183.DataLayers;
+using _19T1021183.DomainModels;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using _19T1021183.DomainModels;
-using _19T1021183.DataLayers;
-using System.Data.SqlClient;
-using _19T1021183.DataLayers.FakeDB;
-using System.Configuration;
-using _19T1021183.DataLayers.SQL_Server;
 
 namespace _19T1021183.BusinessLayers
 {
@@ -36,13 +33,9 @@ namespace _19T1021183.BusinessLayers
         /// <param name="categoryID">Mã loại hàng cần tìm (chuỗi rỗng nếu không tìm kiếm theo loại hàng)</param>
         /// <param name="supplierID">Mã nhà cung cấp cần tìm (chuỗi rỗng nếu không tìm kiếm theo nhà cung cấp)</param>
         /// <returns></returns>
-        public static List<Product> ListOfProducts(int page,
-                int pageSize,
-                string searchValue,
-                out int rowCount)
+        public static List<Product> ListProducts(string searchValue = "", int categoryID = 0, int supplierID = 0)
         {
-            rowCount = productDB.Count(searchValue);
-            return productDB.List(page, pageSize, searchValue).ToList();
+            return productDB.List(1, 0, searchValue, categoryID, supplierID).ToList();
         }
         /// <summary>
         /// Tìm kiếm và lấy danh sách mặt hàng dưới dạng phân trang
@@ -54,20 +47,17 @@ namespace _19T1021183.BusinessLayers
         /// <param name="supplierID"></param>
         /// <param name="rowCount"></param>
         /// <returns></returns>
-        public static List<Product> ListOfProducts(string searchValue = "")
+        public static List<Product> ListProducts(int page, int pageSize, string searchValue, int categoryID, int supplierID, out int rowCount)
         {
-            return productDB.List(1, 0, searchValue).ToList();
+            rowCount = productDB.Count(searchValue, categoryID, supplierID);
+            return productDB.List(page, pageSize, searchValue, categoryID, supplierID).ToList();
         }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static Product GetProduct(int productID)
-        {
-            return productDB.Get(productID);
-        }
-    public static int AddProduct(Product data)
+        public static int AddProduct(Product data)
         {
             return productDB.Add(data);
         }
@@ -191,6 +181,6 @@ namespace _19T1021183.BusinessLayers
         public static bool DeleteAttribute(long attributeID)
         {
             return productDB.DeleteAttribute(attributeID);
-        }    
+        }
     }
 }
