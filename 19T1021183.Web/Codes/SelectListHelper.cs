@@ -36,7 +36,7 @@ namespace _19T1021183.Web//
             list.Add(new SelectListItem()
             {
                 Value = "",
-                Text = "...Chọn loại hàng..."
+                Text = "...Tất cả loại hàng..."
             });
             foreach (var item in CommonDataService.ListOfCategories())
             {
@@ -56,7 +56,7 @@ namespace _19T1021183.Web//
             list.Add(new SelectListItem()
             {
                 Value = "",
-                Text = "...Chọn nhà cung cấp..."
+                Text = "...Tất cả nhà cung cấp..."
             });
             foreach(var item in CommonDataService.ListOfSuppliers())
             {
@@ -65,6 +65,24 @@ namespace _19T1021183.Web//
                     Value = Convert.ToString(item.SupplierID),
                     Text = item.SupplierName
                 });
+            }
+            return list;
+        }
+        public static List<SelectListItem> Orders()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem()
+            {
+                Value = "",
+                Text = "...Tất cả trạng thái..."
+            });
+            foreach(var item in OrderDataService.ListOfOrderStatus())
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = Convert.ToString(item.Status),
+                    Text = item.Description
+                }) ;
             }
             return list;
         }

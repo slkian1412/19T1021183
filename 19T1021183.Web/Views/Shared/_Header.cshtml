@@ -24,24 +24,14 @@
                 }
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        @if (userAccount.Photo.Contains("http"))
-                        {
-                            <img class="user-image" src="@userAccount.Photo" alt="avatar" />
-                        }
-                        else
-                        { <img class="user-image" src="~/Images/@userAccount.Photo" alt="avatar" />}
+                        <img src="~/@userAccount.Photo" class="user-image" alt="User Image">
                         <span class="hidden-xs">@userAccount.FullName</span>
                         @*Giá trị được lưu trong cokkie*@
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            @if (userAccount.Photo.Contains("http"))
-                            {
-                                <img class="user-image" src="@userAccount.Photo" alt="avatar" />
-                            }
-                            else
-                            { <img class="user-image" src="~/Images/@userAccount.Photo" alt="avatar" />}
+                            <img src="~/@userAccount.Photo" class="img-circle" alt="User Image">
                             <p>
                                 @userAccount.FullName
                             </p>

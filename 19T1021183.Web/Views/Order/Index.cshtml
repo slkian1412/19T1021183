@@ -1,41 +1,29 @@
-﻿@model _19T1021183.Web.Models.ProductSearchInput
+﻿@model _19T1021183.Web.Models.OrderSearchInput
 @{
-    ViewBag.Title = "Mặt hàng";
+    ViewBag.Title = "Tra cứu đơn hàng";
 }
-<div class="container-fluid box box-primary">
-    <div class="box-header">
-    </div>
+
+<div class="box box-primary">
     <div class="box-body">
-        <form id="formSearch" action="~/Product/Search" method="post">
+        <!--Form đầu vào tìm kiếm-->
+        <form id="formSearch" action="~/Order/Search" method="post">
             <input type="hidden" name="PageSize" value="@Model.PageSize">
             <div class="row">
-                <div class="col-sm-3">                 
-                    @Html.DropDownListFor(m => m.CategoryID, _19T1021183.Web.SelectListHelper.Categories(), new
-               {
-                   @class = "form-control",
-                   onchange = "doSearch(1)"
-               })
+                <div class="col-sm-3">
+                    @Html.DropDownListFor(m => m.Status, _19T1021183.Web.SelectListHelper.Orders(), new 
+              {
+                  @class = "form-control",
+                  onchange = "doSearch(1)"
+              })
                 </div>
-                <div class="col-sm-3">                  
-                    @Html.DropDownListFor(m => m.SupplierID, _19T1021183.Web.SelectListHelper.Suppliers(), new
-                {
-                    @class = "form-control",
-                    onchange = "doSearch(1)"
-                })
-                </div>
-                <div class="col-sm-6 input-group">
+                <div class="col-sm-9 input-group">
                     <input type="text" name="searchValue"
                            class="form-control"
-                           placeholder="Nhập tên mặt hàng cần tìm" value="@Model.SearchValue">
+                           placeholder="Tìm kiếm theo tên khách hàng hoặc tên người giao hàng" value="@Model.SearchValue">
                     <span class="input-group-btn">
                         <button type="submit" id="search-btn" class="btn btn-flat btn-info">
                             <i class="fa fa-search"></i>
                         </button>
-                        <a href="~/Product/create"
-                           class="btn btn-flat btn-primary"
-                           style="margin-left:5px;">
-                            <i class="fa fa-plus"></i> Bổ sung
-                        </a>
                     </span>
                 </div>
             </div>
@@ -45,10 +33,13 @@
         </div>
     </div>
 </div>
+<!---->
+
 @section scripts{
     <script>
         $(document).ready(function () {
             $("#formSearch").submit(function (e) {
+                e.preventDefault();
                 e.preventDefault();
                 doSearch(1);
                 return;
