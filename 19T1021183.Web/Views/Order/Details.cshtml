@@ -1,6 +1,8 @@
 ﻿@model _19T1021183.DomainModels.Order
 @{
     ViewBag.Title = "Quản lý đơn hàng";
+    int stt = 0;
+    decimal sumTotal = 0;
 }
 
 <div class="box box-primary">
@@ -88,7 +90,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2">Trạng thái đơn hàng:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Status</p>
+                <p class="form-control-static">@Model.StatusDescription</p>
             </div>
             <label class="control-label col-sm-2">Thời điểm hoàn tất:</label>
             <div class="col-sm-4">
@@ -115,12 +117,12 @@
                 <tbody>
                     @{
                         var listOrderDetail = _19T1021183.BusinessLayers.OrderDataService.ListOrderDetails(Model.OrderID);
-                        decimal sumTotal = 0;
                         foreach (var item in listOrderDetail)
                         {
-                            int i = listOrderDetail.IndexOf(item) + 1;
+                            stt += 1;
+
                             <tr>
-                                <td class="text-center">@i</td>
+                                <td class="text-center">@stt</td>
                                 <td class="text-center"> @item.ProductName</td>
                                 <td class="text-center">@item.Unit</td>
                                 <td class="text-center">@item.Quantity</td>
@@ -135,10 +137,10 @@
                                     </a>
                                 </td>
                             </tr>
-                                sumTotal += item.TotalPrice;
-                            }
-
+                            sumTotal += item.TotalPrice;
                         }
+
+                    }
                 </tbody>
                 <tfoot>
                     <tr>

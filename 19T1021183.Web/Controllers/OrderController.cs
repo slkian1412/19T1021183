@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
+using System.Windows;
 
 namespace _19T1021183.Web.Controllers
 {
@@ -141,10 +143,13 @@ namespace _19T1021183.Web.Controllers
         {
             //TODO: Code chức năng chấp nhận đơn hàng (nếu được phép)
             var data = OrderDataService.GetOrder(id);
-            if (data.Status !=2)
-                data = OrderDataService.AcceptOrder(id);
+            if (data.Status != 4 && data.Status != 3 && data.Status != 2)
+            {
+                data.Status = Convert.ToInt32(OrderDataService.AcceptOrder(id));
+                return RedirectToAction($"Details/{id}");
+            }
             else
-                TempData[ERROR_MESSAGE] = "Dữ liệu không hợp lệ";
+                MessageBox.Show("Thao tác không hợp lệ","Lỗi",button:MessageBoxButton.OK,icon:MessageBoxImage.Warning);
             return RedirectToAction($"Details/{id}");
         }
         /// <summary>
@@ -155,9 +160,13 @@ namespace _19T1021183.Web.Controllers
         public ActionResult Shipping(int id = 0, int shipperID = 0)
         {
             //TODO: Code chức năng chuyển đơn hàng sang trạng thái đang giao hàng (nếu được phép)
-
+            if(id<=0)
+                return RedirectToAction("Index");
+            var data = OrderDataService.GetOrder(id);
+            if(data.Status == 4 || data.Status == 3)
+                data.Status = Convert.ToInt32(OrderDataService.ShipOrder(id, (int)data.ShipperID));
             if (Request.HttpMethod == "GET")
-                return View();
+                return View("Details");
 
             return RedirectToAction($"Details/{id}");
         }
@@ -169,6 +178,11 @@ namespace _19T1021183.Web.Controllers
         public ActionResult Finish(int id = 0)
         {
             //TODO: Code chức năng ghi nhận hoàn tất đơn hàng (nếu được phép)
+            var data = OrderDataService.GetOrder(id);
+            if (data.Status != 4)
+                data.Status = Convert.ToInt32(OrderDataService.FinishOrder(id));
+            else
+                return RedirectToAction($"Details/{id}");
 
             return RedirectToAction($"Details/{id}");
         }
