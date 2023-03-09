@@ -85,6 +85,7 @@ namespace _19T1021183.Web.Controllers
                 return RedirectToAction("Index");
 
             var data = CommonDataService.GetProduct(id);
+
             if (data == null)
                 return RedirectToAction("Index");
 

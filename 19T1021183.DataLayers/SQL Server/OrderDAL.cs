@@ -47,7 +47,7 @@ namespace _19T1021183.DataLayers.SQL_Server
                 ShipperID = DBValueToNullableInt(dbReader["ShipperID"]),
                 ShipperName = dbReader["ShipperName"].ToString(),
                 ShipperPhone = dbReader["ShipperPhone"].ToString()
-            };         
+            };
         }
         /// <summary>
         /// Chuyển dữ liệu từ SqlDataReader thành OrderDetail
@@ -251,7 +251,7 @@ namespace _19T1021183.DataLayers.SQL_Server
                 cmd.CommandText = @"SELECT	od.*, p.ProductName, p.Unit, p.Photo		
                                     FROM	OrderDetails AS od
 		                                    JOIN Products AS p ON od.ProductID = p.ProductID
-                                    WHERE	od.OrderID = @OrderID AND ProductID = @ProductID";
+                                    WHERE	od.OrderID = @OrderID AND od.ProductID = @ProductID";
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.AddWithValue("@OrderID", orderID);
                 cmd.Parameters.AddWithValue("@ProductID", productID);
@@ -320,7 +320,7 @@ namespace _19T1021183.DataLayers.SQL_Server
                         data.Add(DataReaderToOrder(dbReader));
                     }
                     dbReader.Close();
-                }   
+                }
 
                 connection.Close();
             }
@@ -353,7 +353,7 @@ namespace _19T1021183.DataLayers.SQL_Server
                     dbReader.Close();
                 }
                 connection.Close();
-            }    
+            }
             return data;
         }
         /// <summary>
@@ -390,7 +390,7 @@ namespace _19T1021183.DataLayers.SQL_Server
                 result = Convert.ToInt32(cmd.ExecuteScalar());
 
                 connection.Close();
-            }    
+            }
             return result;
         }
         /// <summary>

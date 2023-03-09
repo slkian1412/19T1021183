@@ -3,6 +3,7 @@ using _19T1021183.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Description;
@@ -84,13 +85,11 @@ namespace _19T1021183.Web.Controllers
         public ActionResult EditDetail(int orderID = 0, int productID = 0)
         {
             //TODO: Code chức năng để lấy chi tiết đơn hàng cần edit
-            if (productID <= 0)
-                return RedirectToAction("Index");
             var data = OrderDataService.GetOrderDetail(orderID, productID);
             if (data == null)
-                return RedirectToAction("Index");
-
-            ViewBag.Title = "Cập nhật chi tiết đơn hàng";
+                return RedirectToAction("Details");
+       
+            ViewBag.Title = "Cập nhật thông tin chi tiết đơn hàng";
             return View(data);
         }
         /// <summary>
@@ -101,15 +100,23 @@ namespace _19T1021183.Web.Controllers
         [HttpPost]
         public ActionResult UpdateDetail(OrderDetail data)
         {
-            //TODO: Code chức năng để cập nhật chi tiết đơn hàng
-            if (data == null)
-                return RedirectToAction("Index");
-            else
-                data = OrderDataService.GetOrderDetail(data.OrderID, data.ProductID);
-            ViewBag.Title = "Cập nhật chi tiết đơn hàng";
-            return View(data);
-            //return RedirectToAction($"Details/{data.OrderID}");
+                if (data == null)
+                    return RedirectToAction("Details");
+
+                var order = OrderDataService.GetOrder(data.OrderID);
+                if (order == null)
+                {
+                    // Đơn hàng không tồn tại, chuyển hướng về trang chi tiết đơn hàng
+                    return RedirectToAction($"Details/{data.OrderID}");
+                }
+                if(order.Status != OrderStatus.FINISHED && order.Status != OrderStatus.SHIPPING && order.Status != OrderStatus.ACCEPTED)
+                    OrderDataService.SaveOrderDetail(data.OrderID, data.ProductID, data.Quantity, data.SalePrice);
+                else
+                    MessageBox.Show($"{order.StatusDescription}. Không thể thay đổi thông tin chi tiết đơn hàng. ", "Lỗi", button: MessageBoxButton.OK, icon: MessageBoxImage.Warning);
+
+            return RedirectToAction($"Details/{data.OrderID}");
         }
+
         /// <summary>
         /// Xóa 1 chi tiết trong đơn hàng
         /// </summary>
@@ -120,6 +127,14 @@ namespace _19T1021183.Web.Controllers
         public ActionResult DeleteDetail(int orderID = 0, int productID = 0)
         {
             //TODO: Code chức năng xóa 1 chi tiết trong đơn hàng
+            var data = OrderDataService.GetOrder(orderID);
+
+            if (data == null)
+                return RedirectToAction("Details");
+            if(data.Status != OrderStatus.ACCEPTED && data.Status != OrderStatus.SHIPPING && data.Status != OrderStatus.FINISHED)
+                OrderDataService.DeleteOrderDetail(orderID, productID);
+            else
+                MessageBox.Show($"Không thể xóa vì {data.StatusDescription}", "Lỗi", button: MessageBoxButton.OK, icon: MessageBoxImage.Warning);
 
             return RedirectToAction($"Details/{orderID}");
         }
@@ -131,7 +146,14 @@ namespace _19T1021183.Web.Controllers
         public ActionResult Delete(int id = 0)
         {
             //TODO: Code chức năng để xóa đơn hàng (nếu được phép xóa)
-
+            var data = OrderDataService.GetOrder(id);
+            if (data == null)
+                return RedirectToAction("Details");
+            if (data.Status == OrderStatus.INIT || data.Status == OrderStatus.CANCEL || data.Status == OrderStatus.REJECTED)
+                OrderDataService.DeleteOrder(id);
+            else
+                MessageBox.Show($"Không thể xóa {data.StatusDescription}", "Lỗi", button: MessageBoxButton.OK, icon: MessageBoxImage.Error);
+            
             return RedirectToAction("Index");
         }
         /// <summary>
@@ -143,13 +165,16 @@ namespace _19T1021183.Web.Controllers
         {
             //TODO: Code chức năng chấp nhận đơn hàng (nếu được phép)
             var data = OrderDataService.GetOrder(id);
-            if (data.Status != 4 && data.Status != 3 && data.Status != 2)
+            if (data == null)
+                return RedirectToAction("Details");
+            ///Chỉ chấp nhận được những đơn hàng vừa khởi tạo
+            if (data.Status == 1)
             {
-                data.Status = Convert.ToInt32(OrderDataService.AcceptOrder(id));
+                OrderDataService.AcceptOrder(id);
                 return RedirectToAction($"Details/{id}");
             }
             else
-                MessageBox.Show("Thao tác không hợp lệ","Lỗi",button:MessageBoxButton.OK,icon:MessageBoxImage.Warning);
+                MessageBox.Show($"{data.StatusDescription}", "Lỗi", button: MessageBoxButton.OK, icon: MessageBoxImage.Warning);
             return RedirectToAction($"Details/{id}");
         }
         /// <summary>
@@ -157,18 +182,21 @@ namespace _19T1021183.Web.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Shipping(int id = 0, int shipperID = 0)
+        [HttpPost]
+        [Route("Shipping/{orderID}")]
+        public ActionResult Shipping(int orderID = 0, int shipperID = 0)
         {
             //TODO: Code chức năng chuyển đơn hàng sang trạng thái đang giao hàng (nếu được phép)
-            if(id<=0)
-                return RedirectToAction("Index");
-            var data = OrderDataService.GetOrder(id);
-            if(data.Status == 4 || data.Status == 3)
-                data.Status = Convert.ToInt32(OrderDataService.ShipOrder(id, (int)data.ShipperID));
-            if (Request.HttpMethod == "GET")
-                return View("Details");
 
-            return RedirectToAction($"Details/{id}");
+            var data = OrderDataService.GetOrder(orderID);
+            if (data == null)
+                return RedirectToAction("Details");
+
+            if (data.Status == OrderStatus.ACCEPTED)
+                OrderDataService.ShipOrder(orderID, shipperID);
+
+            return View(data);
+
         }
         /// <summary>
         /// Ghi nhận hoàn tất thành công đơn hàng
@@ -179,10 +207,13 @@ namespace _19T1021183.Web.Controllers
         {
             //TODO: Code chức năng ghi nhận hoàn tất đơn hàng (nếu được phép)
             var data = OrderDataService.GetOrder(id);
+            if (data == null)
+                return RedirectToAction("Order");
+            ///Chỉ hoàn tất những đơn hàng chưa hoàn tất
             if (data.Status != 4)
-                data.Status = Convert.ToInt32(OrderDataService.FinishOrder(id));
+                OrderDataService.FinishOrder(id);
             else
-                return RedirectToAction($"Details/{id}");
+                MessageBox.Show($"{data.StatusDescription}", "Lỗi", button: MessageBoxButton.OK, icon: MessageBoxImage.Warning);
 
             return RedirectToAction($"Details/{id}");
         }
@@ -194,7 +225,15 @@ namespace _19T1021183.Web.Controllers
         public ActionResult Cancel(int id = 0)
         {
             //TODO: Code chức năng hủy đơn hàng (nếu được phép)
+            var data = OrderDataService.GetOrder(id);
 
+            if (data == null)
+                return RedirectToAction($"Details/{id}");
+            ///Chỉ hủy được những đơn hàng vừa khởi tạo, bị từ chối, đã chấp nhận
+            if (data.Status != 4 && data.Status != 3 && data.Status != -1)
+                OrderDataService.CancelOrder(id);
+            else
+                MessageBox.Show($"Không thể hủy. {data.StatusDescription}", "Lỗi", button: MessageBoxButton.OK, icon: MessageBoxImage.Warning);
             return RedirectToAction($"Details/{id}");
         }
         /// <summary>
@@ -205,7 +244,16 @@ namespace _19T1021183.Web.Controllers
         public ActionResult Reject(int id = 0)
         {
             //TODO: Code chức năng từ chối đơn hàng (nếu được phép)
+            var data = OrderDataService.GetOrder(id);
 
+            if (data == null)
+                return RedirectToAction("Details");
+
+            if (data.Status == 1)
+                OrderDataService.RejectOrder(id);
+            else
+                MessageBox.Show($"Không thể từ chối. {data.StatusDescription}", "Lỗi", button: MessageBoxButton.OK, icon: MessageBoxImage.Warning);
+            
             return RedirectToAction($"Details/{id}");
         }
 

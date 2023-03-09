@@ -16,14 +16,14 @@ namespace _19T1021183.BusinessLayers
     public static class OrderDataService
     {
         private static IOrderDAL orderDB;
-        private static  IOrderDAL statusDB;
+        private static IOrderDAL statusDB;
         /// <summary>
         /// 
         /// </summary>
         static OrderDataService()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
-            
+
             orderDB = new DataLayers.SQL_Server.OrderDAL(connectionString);
             statusDB = new DataLayers.SQL_Server.OrderDAL(connectionString);
         }
@@ -93,13 +93,13 @@ namespace _19T1021183.BusinessLayers
             Order data = orderDB.Get(orderID);
             if (data == null)
                 return false;
-            
+
             //TODO: Kiểm tra xem việc hủy bỏ đơn hàng có hợp lý đối với trạng thái hiện tại của đơn hàng hay không?
             //... Your code here ...
 
             data.Status = OrderStatus.CANCEL;
             data.FinishedTime = DateTime.Now;
-            return orderDB.Update(data);            
+            return orderDB.Update(data);
         }
         /// <summary>
         /// Từ chối đơn hàng
@@ -117,7 +117,7 @@ namespace _19T1021183.BusinessLayers
 
             data.Status = OrderStatus.REJECTED;
             data.FinishedTime = DateTime.Now;
-            return orderDB.Update(data);            
+            return orderDB.Update(data);
         }
         /// <summary>
         /// Chấp nhận đơn hàng
@@ -135,7 +135,7 @@ namespace _19T1021183.BusinessLayers
 
             data.Status = OrderStatus.ACCEPTED;
             data.AcceptTime = DateTime.Now;
-            return orderDB.Update(data);            
+            return orderDB.Update(data);
         }
         /// <summary>
         /// Xác nhận đã chuyển hàng
@@ -153,7 +153,7 @@ namespace _19T1021183.BusinessLayers
             //... Your code here ...
 
             data.Status = OrderStatus.SHIPPING;
-            data.ShipperID = shipperID;
+            //data.ShipperID = shipperID;
             data.ShippedTime = DateTime.Now;
             return orderDB.Update(data);
         }
@@ -186,11 +186,9 @@ namespace _19T1021183.BusinessLayers
             var data = orderDB.Get(orderID);
             if (data == null)
                 return false;
+            
+            return orderDB.Delete(orderID);
 
-            if (data.Status == OrderStatus.INIT || data.Status == OrderStatus.CANCEL || data.Status == OrderStatus.REJECTED)
-                return orderDB.Delete(orderID);
-
-            return false;
         }
         /// <summary>
         /// Lấy danh sách chi tiết của đơn hàng
