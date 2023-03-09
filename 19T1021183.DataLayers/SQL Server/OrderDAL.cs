@@ -251,7 +251,7 @@ namespace _19T1021183.DataLayers.SQL_Server
                 cmd.CommandText = @"SELECT	od.*, p.ProductName, p.Unit, p.Photo		
                                     FROM	OrderDetails AS od
 		                                    JOIN Products AS p ON od.ProductID = p.ProductID
-                                    WHERE	od.OrderID = @OrderID AND od.ProductID = @ProductID";
+                                    WHERE	od.OrderID = @OrderID AND p.ProductID = @ProductID";
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.AddWithValue("@OrderID", orderID);
                 cmd.Parameters.AddWithValue("@ProductID", productID);

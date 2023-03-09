@@ -27,9 +27,9 @@ namespace _19T1021183.Web.Codes
             }
         }
 
-        public static UserAccount CookieToUserAccount(string value)
+        public static UserAccount CookieToUserAccount(string cookie)
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<UserAccount>(value);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<UserAccount>(cookie);
         }
     }
 }

@@ -151,11 +151,14 @@ namespace _19T1021183.BusinessLayers
 
             //TODO: Kiểm tra xem việc xác nhận đã chuyển hàng có hợp lý đối với trạng thái hiện tại của đơn hàng hay không?
             //... Your code here ...
-
-            data.Status = OrderStatus.SHIPPING;
-            //data.ShipperID = shipperID;
-            data.ShippedTime = DateTime.Now;
-            return orderDB.Update(data);
+            if (data.Status == OrderStatus.ACCEPTED)
+            {
+                data.Status = OrderStatus.SHIPPING;
+                data.ShipperID = shipperID;
+                data.ShippedTime = DateTime.Now;
+                return orderDB.Update(data);
+            }
+            return false;
         }
         /// <summary>
         /// Ghi nhận kết thúc quá trình xử lý đơn hàng thành công

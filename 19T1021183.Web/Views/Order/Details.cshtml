@@ -1,4 +1,5 @@
-﻿@model _19T1021183.DomainModels.Order
+﻿@using _19T1021183.DomainModels 
+@model _19T1021183.DomainModels.Order
 @{
     ViewBag.Title = "Quản lý đơn hàng";
     int stt = 0;
@@ -8,9 +9,7 @@
 <div class="box box-primary">
     <div class="box-header text-right">
         <div class="btn-group">
-            <input type="hidden" name="orderID" value="@Model.OrderID" />
-            <input type="hidden" name="shipperID" value="@Model.ShipperID" />
-
+       
             <!-- //TODO
     YÊU CẦU: Đối với các chức năng liên quan đến đơn hàng, chỉ được hiển thị menu/nút của những chức năng
     phù hợp với trạng thái hiện tại của đơn hàng (ví dụ: Nếu đơn hàng chưa được chấp nhận thì không được chuyển để giao hàng)

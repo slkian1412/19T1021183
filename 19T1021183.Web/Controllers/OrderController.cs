@@ -182,20 +182,19 @@ namespace _19T1021183.Web.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
-        [Route("Shipping/{orderID}")]
-        public ActionResult Shipping(int orderID = 0, int shipperID = 0)
+        //[HttpPost]
+        //[Route("Shipping/{orderID}")]
+        public ActionResult Shipping(int id = 0, int shipperID = 0)
         {
             //TODO: Code chức năng chuyển đơn hàng sang trạng thái đang giao hàng (nếu được phép)
+            if (Request.HttpMethod == "GET")
+                return View(id);
+            if (id <= 0 || shipperID <= 0)
+                return RedirectToAction("");
 
-            var data = OrderDataService.GetOrder(orderID);
-            if (data == null)
-                return RedirectToAction("Details");
+            OrderDataService.ShipOrder(id, shipperID);
 
-            if (data.Status == OrderStatus.ACCEPTED)
-                OrderDataService.ShipOrder(orderID, shipperID);
-
-            return View(data);
+            return RedirectToAction($"Details/{id}");
 
         }
         /// <summary>
